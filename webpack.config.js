@@ -40,7 +40,9 @@ let config = {
     app: [
       'webpack/hot/dev-server',
       'webpack-hot-middleware/client',
-      path.join(__dirname, 'src', 'app', 'index.js')
+      (process.env.NODE_ENV === 'production') ?
+        path.join(__dirname, 'src', 'app',  'grid', 'index.js') :
+        path.join(__dirname, 'src', 'app', 'index.js')
     ]
   },
   output: {
@@ -49,8 +51,7 @@ let config = {
     filename: 'bundle.js'
   },
   plugins: (process.env.NODE_ENV === 'production') ? [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin()
+    // new webpack.optimize.minimize()
   ] : [
     // new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),

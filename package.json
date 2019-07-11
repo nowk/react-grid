@@ -2,7 +2,7 @@
   "name": "react-grid",
   "version": "0.0.0",
   "description": "React Grid Components",
-  "main": "src/app/grid/index.js",
+  "main": "dist/javascripts/bundle.js",
   "dependencies": {
     "@babel/core": "^7.5.0",
     "@babel/preset-env": "^7.5.0",
