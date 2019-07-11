@@ -34,7 +34,7 @@ const Column = (props) => {
 
   return (
     <div className={classnames(props, c)} style={props.style}>
-      {this.props.children}
+      {props.children}
     </div>
   )
 }
