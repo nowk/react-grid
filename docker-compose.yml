@@ -1,0 +1,41 @@
+version: "2.0"
+
+services:
+  nodejs:
+    image: "node:11.8.0"
+    volumes:
+      - .:/usr/src
+      - node_modules:/usr/src/node_modules/
+      - .bin/dumb-init:/usr/local/bin/dumb-init
+    working_dir: /usr/src
+ 
+  npm:
+    extends:
+      service: nodejs
+    entrypoint: dumb-init npm
+    volumes_from:
+      - nodejs
+
+  gulp:
+    extends:
+      service: nodejs
+    entrypoint: dumb-init ./node_modules/.bin/gulp
+    volumes_from:
+      - nodejs
+
+  web:
+    extends:
+      service: nodejs
+    entrypoint: dumb-init ./node_modules/.bin/gulp
+    command: dev
+    volumes_from:
+      - nodejs
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+      - "8888:8888"
+
+volumes:
+  node_modules:
+

@@ -1,0 +1,133 @@
+@import 'funcs';
+
+// based on Chrome Responsive brekadowns
+$xl: 2560px;
+$lg: 1440px;
+$md: 1024px;
+$sm: 768px;
+$xs: 425px;
+
+$container: 1640px;
+
+// grid settings (based on xd Web1080 default grid)
+// width:          1920px
+// container:      1640px
+// columns:        12
+// column-width:   122px
+// gutter-width:   16px
+// linked-margin:  140px
+
+$width-scroll-bar:  calc(100vw);
+$grid-width:        calc((1640/1920) * 100%);
+$linked-margins:    calc((((1640/1920) - 1) * -100%) / 2);
+$column-width:      calc(100% / 12);
+$gutter-width:      calc(((16/138) * 100%) / 12);
+
+.container {
+  width: $grid-width;
+  margin: 0 $linked-margins;
+  padding: 0;
+
+  @media (max-width: $md) {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+
+  &--relative {
+    display: flex;
+  }
+}
+
+.col {
+  flex-shrink: 0;
+  box-sizing: border-box;
+
+  @for $i from 1 through 12 {
+    &-#{$i} {
+      width: calc(#{$column-width} * #{$i});
+      padding-right: $gutter-width;
+
+      .row--relative & {
+        @for $j from 1 through 12 {
+          .col-#{$j} & {
+            width: calc((100% / #{$j}) * #{$i});
+          }
+        }
+      }
+
+      &--extend, &--prepend {
+        @media (min-width: $md) {
+          width: calc((#{$column-width} * #{$i}) + ((((1640/1920) - 1) * (#{$width-scroll-bar} * -1) / 2));
+        }
+
+        // FIXME prepend/extend support for relative
+      }
+
+      &--extend {
+        margin-right: calc(((((1640/1920) - 1) * -100vw) / 2) * -1);
+      }
+
+      &--prepend {
+        margin-left: calc(((((1640/1920) - 1) * (#{$width-scroll-bar} * -1) / 2) * -1);
+      }
+    }
+  }
+
+  &--offset {
+    &-left {
+      @for $i from 1 through 11 {
+        &-#{$i} {
+          margin-left: calc(#{$column-width} * #{$i});
+        }
+      }
+    }
+  }
+
+  &--nogutter {
+    padding-right: 0;
+  }
+}
+
+.row--debug {
+  .col {
+    background-color: rgba(0, 0, 0, 1.00);
+
+    @for $i from 1 through 12 {
+      &:nth-child(#{$i}){
+        background-color: rgba(0, 0, 0, 1-($i/12)); 
+      }
+    }
+  }
+}
+
+.debug {
+  &-overlay {
+    position:        fixed;
+    top:             0;
+    right:           0;
+    bottom:          0;
+    left:            0;
+    z-index:         10000;
+    pointer-events:  none;
+
+    >[class*='container'], [class*='row'] {
+      height: 100%;
+    }
+
+    [class*='col-'] {
+      background-color: transparent !important;
+    }
+
+    &__col {
+      height: 100%;
+      background-color: rgba(139, 239, 248, 0.40) !important;
+    }
+  }
+}
+
